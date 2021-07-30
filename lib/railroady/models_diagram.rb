@@ -1,11 +1,3 @@
-# frozen_string_literal: true
-
-# RailRoady - RoR diagrams generator
-# http://railroad.rubyforge.org
-#
-# Copyright 2007-2008 - Javier Smaldone (http://www.smaldone.com.ar)
-# See COPYING for more details
-
 require 'railroady/app_diagram'
 
 # RailRoady models diagram
@@ -304,7 +296,7 @@ class ModelsDiagram < AppDiagram
     if class_name.include?('::') && !assoc_class_name.include?('::')
       assoc_class_name = class_name.split('::')[0..-2].push(assoc_class_name).join('::')
     end
-    assoc_class_name.gsub!(/^::/, '')
+    assoc_class_name = assoc_class_name.gsub(/^::/, '')
 
     if %w[has_one references_one embeds_one].include?(macro)
       assoc_type = 'one-one'
