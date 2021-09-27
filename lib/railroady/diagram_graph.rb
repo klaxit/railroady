@@ -98,7 +98,7 @@ class DiagramGraph
   # Build a DOT graph edge
   def dot_edge(type, from, to, name = '')
     options =  name != '' ? "label=\"#{name}\", " : ''
-    options += "headlabel=#{quote(from)}, taillabel=#{quote(to)}, "
+    options += "labeldistance=3.0, headlabel=#{quote(from)}, taillabel=#{quote(to)}, "
     edge_color = '"#%02X%02X%02X"' % [rand(255), rand(255), rand(255)]
     suffix = ", dir=both color=#{edge_color}"
     case type
