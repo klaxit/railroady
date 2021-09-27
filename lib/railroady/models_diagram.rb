@@ -2,6 +2,29 @@ require 'railroady/app_diagram'
 
 # RailRoady models diagram
 class ModelsDiagram < AppDiagram
+  class ContentColumn < Struct.new(:name, :type, :comment)
+    include Comparable
+
+    # Columns always in first
+    RANKS = %w(id created_at updated_at)
+
+    def to_s
+      str = "#{name}"
+      str += " :#{type}" if type
+      str += "\\l#{comment}" if comment
+      str
+    end
+
+    def <=>(other)
+      rank_self = RANKS.index(name) || RANKS.size
+      rank_other = RANKS.index(other.name) || RANKS.size
+
+      return rank_self - rank_other if rank_other != rank_self
+
+      name <=> other.name
+    end
+  end
+
   def initialize(options = OptionsStruct.new)
     super options
     @graph.diagram_type = 'Models'
@@ -126,10 +149,12 @@ class ModelsDiagram < AppDiagram
         content_columns = current_class.columns
       end
 
-      content_columns.each do |a|
-        content_column = a.name
-        content_column += " :#{a.sql_type.to_s}" unless @options.hide_types
-        node_attribs << content_column
+      node_attribs = content_columns.map do |a|
+        ContentColumn.new(
+          a.name,
+          @options.hide_types ? nil : a.sql_type.to_s,
+          a.comment
+        )
       end
     end
     @graph.add_node [node_type, current_class.name, node_attribs]
