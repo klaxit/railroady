@@ -81,7 +81,6 @@ class ModelsDiagram < AppDiagram
     if class_name.nil?
       filename_was.match(%r{.*/models/(.*).rb$})[1].camelize
     else
-      warn class_name
       class_name
     end
   end
@@ -105,7 +104,6 @@ class ModelsDiagram < AppDiagram
         process_basic_module(current_class)
       end
 
-    warn generated
     if @options.inheritance && generated && include_inheritance?(current_class)
       @graph.add_edge ['is-a', current_class.superclass.name, current_class.name]
     end
